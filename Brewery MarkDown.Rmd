@@ -56,12 +56,12 @@ Now we'll pull the first 6 obs from master_beer with the head function and defin
 ```{r}
 head(master_beer, n=6)
 ```
-### 3  Report the number of NA's in each column. 
+### 3) Report the number of NA's in each column. 
 Here our code starts is.na of the master_beer data set. This looks for values that are null, blank, N/A. The colsums function takes the sumation of those N/A's by column showing us a clean summary of what data is not present. 
 ```{r}
 colSums(is.na(master_beer))
 ```
-### 4 Compute the median alcohol content and international bitterness unit for each state. Plot a bar chart to compare. 
+### 4) Compute the median alcohol content and international bitterness unit for each state. Plot a bar chart to compare. 
 In the first tapply function it takes the master_beer data set, looks at the ABV by state and reports back the median into a dataset med.abv because that is what we have told the tapply to calculate. In the second tapply notice the code is the same except we now tell it to calculate the IBU value and save it into med.IBU. 
 ```{r}
 med.abv<-tapply(master_beer$ABV, master_beer$State, median)
@@ -72,27 +72,28 @@ Now we calculate the bar graph for each vlaue by state
 barplot(med.abv)
 barplot(med.IBU)
 ```
-### 5 Which state has the maximum alcoholic beer? Which state has the most bitter beer? 
+### 5) Which state has the maximum alcoholic beer? Which state has the most bitter beer? 
+The R code below uses the function which.max and then the data we are looking at. The which function ranks the data variables and the max pulls out the max value and displays the row. Now we know which brewery has the highest ABV and IBU. Yum-O!
 ```{r}
 master_beer[which.max(master_beer$ABV),]
 master_beer[which.max(master_beer$IBU),]
 ```
-### 6 Summary statistics for ABV (Alcohol by volume) variable. 
+### 6) Summary statistics for ABV (Alcohol by volume) variable. 
+Here the summary function will give us a summary of the data. With this we now know what the range is and if we have any N/A's influencing the data.
 ```{r}
 summary(master_beer$ABV)
 ```
-# 7 Is there a relationship between the bitterness of the beer and its alcoholic content? Draw a scatter plot. 
-
+# 7) Is there a relationship between the bitterness of the beer and its alcoholic content? Draw a scatter plot. 
+Here is our scatter plot a regression line which comes from "geom_smooth(method = lm)"
 ```{r}
 ggplot(data = master_beer, mapping = aes(x = master_beer$ABV, y = master_beer$IBU))+
   geom_point() +
   geom_smooth(method = lm) 
 ```
-
+The scatterplot and regression line make it look like there is a positive correlation between ABV and IBU. the next line of code will help us further by looking at the p value and correlation value
 ```{r}
 cor.test(master_beer$ABV,master_beer$IBU)
-myfit <- lm(master_beer$ABV ~ master_beer$IBU, data=master_beer)
-
-summary(myfit)
-confint(myfit)
 ```
+## Conclusion
+
+With a p value of 2.2e-16 we can say we should reject the null hypothesis that the intercept is 0 which is further proved by the confidence interval being .64 to .69 at 95%. Also the r-squ correlation is .6706 squared = .45 which is a fairly strong relationship. It's safe to say that as you increase either ABV or IBU the other will increase as well. 
