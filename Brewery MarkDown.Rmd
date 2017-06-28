@@ -19,7 +19,7 @@ setwd("C:/Users/Drew/Documents/R/Doing Data Science/Breweries/Case-Study-01-Beer
 beers<- read.csv("C:\\Users\\Drew\\Desktop\\Doing Data Science MSDS 6306\\Case File\\Beers.csv")
 breweries<- read.csv("C:\\Users\\Drew\\Desktop\\Doing Data Science MSDS 6306\\Case File\\Breweries.csv")
 ```
-### Packages used    
+### Packages    
 Packages needed to run the R code
 ```{r}
 library(tidyverse)
@@ -28,47 +28,56 @@ library(plyr)
 
 # Questions    
 ### 1) How many Breweries are present in each state?
-This code looks at the breweris data set and counts each row within the data set by state column and returns a count of how often each state appears. Since each row is a unique brewery this will tell us how many breweries we have in each state in our data set. 
+This code looks at the breweris data set and counts each row within the data set by the state column and returns a count of how often each state appears. Since each row is a unique brewery this will tell us how many breweries we have in each state in our data set. 
 ```{r}
 count(breweries,'State')
 ```
 
 ### 2) Merge beer data with breweries data by brewery id. Print first 6 observations and the last six observations to check the merged file. 
-
-
-#merging data
+First we need to merge the data. The R code below first looks at the columns of each data set. We want to map the beer data to the brewery data on the brewery ID. From the colnames code we can see that the columns do not have the same name.
 ```{r}
 colnames(beers)
 colnames(breweries)
+```
+The code below will fix the column name so when we merge the data it will be a smooth transition.
+It looksfor the brewery_id on the beer data set and relabels it Brew_ID. Then we spot check that it went through.
+```{r}
 colnames(beers)[colnames(beers)=="Brewery_id"] <- "Brew_ID"
 colnames(beers)
-
+```
+Looks solid :) 
+Now we'll merge the data on the Brew_ID from both data sets. The code below makes a new data set master_beer, which takes the merge
+of breweris and beers identified by the Brew_ID.
+```{r}
 master_beer <- merge(breweries,beers,by="Brew_ID")
 str(master_beer)
 ```
-# First 6 obs master_beer
+Now we'll pull the first 6 obs from master_beer with the head function and define the n to 6.
 ```{r}
 head(master_beer, n=6)
 ```
-# 3  Report the number of NA's in each column. 
+### 3  Report the number of NA's in each column. 
+Here our code starts is.na of the master_beer data set. This looks for values that are null, blank, N/A. The colsums function takes the sumation of those N/A's by column showing us a clean summary of what data is not present. 
 ```{r}
 colSums(is.na(master_beer))
 ```
-
-# 4 Compute the median alcohol content and international bitterness unit for each state. Plot a bar chart to compare. 
+### 4 Compute the median alcohol content and international bitterness unit for each state. Plot a bar chart to compare. 
+In the first tapply function it takes the master_beer data set, looks at the ABV by state and reports back the median into a dataset med.abv because that is what we have told the tapply to calculate. In the second tapply notice the code is the same except we now tell it to calculate the IBU value and save it into med.IBU. 
 ```{r}
 med.abv<-tapply(master_beer$ABV, master_beer$State, median)
 med.IBU<-tapply(master_beer$IBU, master_beer$State, median)
-
+```
+Now we calculate the bar graph for each vlaue by state
+```{r}
 barplot(med.abv)
 barplot(med.IBU)
 ```
-# 5 Which state has the maximum alcoholic beer? Which state has the most bitter beer? 
+### 5 Which state has the maximum alcoholic beer? Which state has the most bitter beer? 
 ```{r}
 master_beer[which.max(master_beer$ABV),]
 master_beer[which.max(master_beer$IBU),]
 ```
-# 6 Summary statistics for ABV (Alcohol by volume) variable. 
+### 6 Summary statistics for ABV (Alcohol by volume) variable. 
 ```{r}
 summary(master_beer$ABV)
 ```
