@@ -2,7 +2,7 @@
 title: "Case_01"
 author: "Andrew Shen"
 date: "June 27, 2017"
-output: html_document
+output: github_document
 ---
 
 
