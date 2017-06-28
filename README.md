@@ -5,6 +5,7 @@ The R Markdown File is labeled "Brewery MarkDown.Rmd"
 HTML Uploaded with R code output is called "Case01_Brewery.html". You'll need to download to view.
 
 Raw data: Raw Data Beers and Breweries.
+
 Analysis folder: R Script
 
 Thanks,
