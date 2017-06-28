@@ -2,11 +2,11 @@
 title: "Case_01"
 author: "Andrew Shen"
 date: "June 27, 2017"
-output: github_document
+output: html_document
 ---
 
 
-#### R Markdown
+#R Markdown
 
 #Introduction:
 ###This Case study ties 2 data sets together about breweries and the beer they make. 
