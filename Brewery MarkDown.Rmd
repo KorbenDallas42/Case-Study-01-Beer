@@ -7,9 +7,9 @@ output: html_document
 
 #### R Markdown
 ## Introduction:
-This Case study ties 2 data sets together about breweries and the beer they make. 
-From the brewery & beer merged data,we look at the bitterness and alcohol by vloume (ABV) in relation to their brewwery state. 
-We then will look further into the relationship between betterness and ABV and see if there is a correlation.
+This case study ties 2 data sets together about breweries and the beer they make. 
+From the brewery & beer merged data, we look at the bitterness (IBU) and alcohol by volume (ABV) in relation to their brewwery state. 
+We then will look further into the relationship between IBU and ABV and see if there is a correlation.
 
 ### Importing the Raw Data
 Pulling the data into R.
@@ -34,35 +34,35 @@ count(breweries,'State')
 ```
 
 ### 2) Merge beer data with breweries data by brewery id. Print first 6 observations and the last six observations to check the merged file. 
-First we need to merge the data. The R code below first looks at the columns of each data set. We want to map the beer data to the brewery data on the brewery ID. From the colnames code we can see that the columns do not have the same name.
+First we need to merge the data. The R code below first looks at the columns of each data set. We want to map the beer data to the brewery data on the brewery ID. From the colnames code we can see that this columns do not have the same name.
 ```{r}
 colnames(beers)
 colnames(breweries)
 ```
 The code below will fix the column name so when we merge the data it will be a smooth transition.
-It looksfor the brewery_id on the beer data set and relabels it Brew_ID. Then we spot check that it went through.
+It looks for the brewery_id on the beer data set and relabels it Brew_ID. Then we spot check that it went through.
 ```{r}
 colnames(beers)[colnames(beers)=="Brewery_id"] <- "Brew_ID"
 colnames(beers)
 ```
-Looks solid :) 
+Looks solid :).
 Now we'll merge the data on the Brew_ID from both data sets. The code below makes a new data set master_beer, which takes the merge
-of breweris and beers identified by the Brew_ID.
+of breweris and beers identified by the Brew_ID. The str() function is a quick gut check that everything looks good.
 ```{r}
 master_beer <- merge(breweries,beers,by="Brew_ID")
 str(master_beer)
 ```
-Now we'll pull the first 6 obs from master_beer with the head function and define the n to 6.
+Now we'll pull the first 6 obs from master_beer with the head function and define the number of observations we want to look at with n=6.
 ```{r}
 head(master_beer, n=6)
 ```
 ### 3) Report the number of NA's in each column. 
-Here our code starts is.na of the master_beer data set. This looks for values that are null, blank, N/A. The colsums function takes the sumation of those N/A's by column showing us a clean summary of what data is not present. 
+The is.na function looks for values that are null, blank, N/A within the master_beer data set. The colsums function takes the sumation of those N/A's by column showing us a clean summary of what data is not present. 
 ```{r}
 colSums(is.na(master_beer))
 ```
 ### 4) Compute the median alcohol content and international bitterness unit for each state. Plot a bar chart to compare. 
-In the first tapply function it takes the master_beer data set, looks at the ABV by state and reports back the median into a dataset med.abv because that is what we have told the tapply to calculate. In the second tapply notice the code is the same except we now tell it to calculate the IBU value and save it into med.IBU. 
+The first tapply function takes the master_beer data set, looks at the ABV by state and stores the median into med.abv because that is what we have told the tapply to do. In the second tapply notice the code is the same except we now tell it to calculate the IBU value and save it into med.IBU. 
 ```{r}
 med.abv<-tapply(master_beer$ABV, master_beer$State, median)
 med.IBU<-tapply(master_beer$IBU, master_beer$State, median)
@@ -84,16 +84,18 @@ Here the summary function will give us a summary of the data. With this we now k
 summary(master_beer$ABV)
 ```
 # 7) Is there a relationship between the bitterness of the beer and its alcoholic content? Draw a scatter plot. 
-Here is our scatter plot a regression line which comes from "geom_smooth(method = lm)"
+Here is our scatter plot and a regression line which comes from "geom_smooth(method = lm)". The scatter plot is defined by labeling our x and y axis from master_beer.
 ```{r}
 ggplot(data = master_beer, mapping = aes(x = master_beer$ABV, y = master_beer$IBU))+
   geom_point() +
   geom_smooth(method = lm) 
 ```
-The scatterplot and regression line make it look like there is a positive correlation between ABV and IBU. the next line of code will help us further by looking at the p value and correlation value
+The scatterplot and regression line make it look like there is a positive correlation between ABV and IBU. The next line of code will help us further by looking at the p value and correlation value.
 ```{r}
 cor.test(master_beer$ABV,master_beer$IBU)
 ```
 ## Conclusion
 
-With a p value of 2.2e-16 we can say we should reject the null hypothesis that the intercept is 0 which is further proved by the confidence interval being .64 to .69 at 95%. Also the r-squ correlation is .6706 squared = .45 which is a fairly strong relationship. It's safe to say that as you increase either ABV or IBU the other will increase as well. 
+With a p value of 2.2e-16 we can say we should reject the null hypothesis that the intercept is 0 which is further proved by the confidence interval being .64 to .69 at 95%. Also the r-squared correlation = .6706 squared = .45 which is a fairly strong relationship. It's safe to say that as you increase either ABV or IBU the other will increase as well. 
+
+It's also worth noting that 1005 beers out of 2410 do not have an IBU value, but there is still 1405 observations with IBU which is a large sample still.
