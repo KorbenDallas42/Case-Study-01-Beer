@@ -5,19 +5,13 @@ date: "June 27, 2017"
 output: html_document
 ---
 
-# R Markdown
-## R Markdown
-### R Markdown
 #### R Markdown
-##### R Markdown
-###### R Markdown
+## Introduction:
+This Case study ties 2 data sets together about breweries and the beer they make. 
+From the brewery & beer merged data,we look at the bitterness and alcohol by vloume (ABV) in relation to their brewwery state. 
+We then will look further into the relationship between betterness and ABV and see if there is a correlation.
 
-#Introduction:
-###This Case study ties 2 data sets together about breweries and the beer they make. 
-###From the brewery & beer merged data,we look at the bitterness and alcohol by vloume (ABV) in relation to their brewwery state. 
-###We then will look further into the relationship between betterness and ABV and see if there is a correlation.
-
-##Importing the Raw Data d
+### Importing the Raw Data d
 
 ```{r}
 setwd("C:/Users/Drew/Documents/R/Doing Data Science/Breweries/Case-Study-01-Beer")
