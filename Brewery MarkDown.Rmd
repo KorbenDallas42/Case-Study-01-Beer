@@ -5,12 +5,12 @@ date: "June 27, 2017"
 output: github_document
 ---
 
-#R Markdown
-##R Markdown
-###R Markdown
-####R Markdown
-#####R Markdown
-######R Markdown
+# R Markdown
+## R Markdown
+### R Markdown
+#### R Markdown
+##### R Markdown
+###### R Markdown
 
 #Introduction:
 ###This Case study ties 2 data sets together about breweries and the beer they make. 
