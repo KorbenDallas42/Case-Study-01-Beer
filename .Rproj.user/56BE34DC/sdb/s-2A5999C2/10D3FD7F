@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "---\ntitle: \"Case_01\"\nauthor: \"Andrew Shen\"\ndate: \"June 27, 2017\"\noutput: html_document\n---\n\n\n#### R Markdown\n\n#Introduction:\n###This Case study ties 2 data sets together about breweries and the beer they make. \n###From the brewery & beer merged data,we look at the bitterness and alcohol by vloume (ABV) in relation to their brewwery state. \n###We then will look further into the relationship between betterness and ABV and see if there is a correlation.\n\n##Importing the Raw Data\n\n```{r}\nsetwd(\"C:/Users/Drew/Documents/R/Doing Data Science/Breweries/Case-Study-01-Beer\")\n\nbeers<- read.csv(\"C:\\\\Users\\\\Drew\\\\Desktop\\\\Doing Data Science MSDS 6306\\\\Case File\\\\Beers.csv\")\nbreweries<- read.csv(\"C:\\\\Users\\\\Drew\\\\Desktop\\\\Doing Data Science MSDS 6306\\\\Case File\\\\Breweries.csv\")\n\n#   packages used    \nlibrary(tidyverse)\nlibrary(plyr)\n#  Questions    \n\n#1 How many Breweries are present in each state?\n\ncount(breweries,'State')\n```\n#2 Merge beer data with breweries data by brewery id. Print first 6 observations and the \n#last six observations to check the merged file. \n\n#merging data\n```{r}\ncolnames(beers)\ncolnames(breweries)\ncolnames(beers)[colnames(beers)==\"Brewery_id\"] <- \"Brew_ID\"\ncolnames(beers)\n\nmaster_beer <- merge(breweries,beers,by=\"Brew_ID\")\nstr(master_beer)\n#First 6 obs master_beer\nhead(master_beer, n=6)\n\n#3  Report the number of NA's in each column. \n\ncolSums(is.na(master_beer))\n\n#4 Compute the median alcohol content and international bitterness unit for each state. Plot\n#a bar chart to compare. \n\nmed.abv<-tapply(master_beer$ABV, master_beer$State, median)\nmed.IBU<-tapply(master_beer$IBU, master_beer$State, median)\n\nbarplot(med.abv)\nbarplot(med.IBU)\n\n#5 Which state has the maximum alcoholic beer? Which state has the most bitter beer? \nmaster_beer[which.max(master_beer$ABV),]\nmaster_beer[which.max(master_beer$IBU),]\n\n#6 Summary statistics for ABV (Alcohol by volume) variable. \nsummary(master_beer$ABV)\n\n#7 Is there a relationship between the bitterness of the beer and its alcoholic content? Draw\n#a scatter plot. \nggplot(data = master_beer, mapping = aes(x = master_beer$ABV, y = master_beer$IBU))+\n  geom_point() +\n  geom_smooth(method = lm) \n\ncor.test(master_beer$ABV,master_beer$IBU)\nmyfit <- lm(master_beer$ABV ~ master_beer$IBU, data=master_beer)\n\nsummary(myfit)\nconfint(myfit)\n\n",
+    "created" : 1498616815473.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2465749668",
+    "id" : "10D3FD7F",
+    "lastKnownWriteTime" : 1498617668,
+    "last_content_update" : 1498617721375,
+    "path" : "~/R/Doing Data Science/Case 01/Case-Study-01-Beer/Case_01_Markdown.Rmd",
+    "project_path" : "Case_01_Markdown.Rmd",
+    "properties" : {
+        "source_window_id" : "",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
